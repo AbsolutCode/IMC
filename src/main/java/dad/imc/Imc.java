@@ -79,14 +79,15 @@ public class Imc extends Application {
 		total.bind((peso.divide(altura.multiply(altura))).multiply(10000d));
 		
 		total.addListener((o, ov, nv) -> System.out.println(nv));
-		
-		totalIMC = imcLabel.textProperty();
 			
-		imcLabel.textProperty().bind(
+		
+		
+		/* imcLabel.textProperty().bind(
 				Bindings
-				.when(totalIMC.isEmpty())
+				.when(imcLabel.textProperty().isEmpty())
 				.then("IMC: (peso * altura^ 2)")
-				.otherwise(Bindings.concat("IMC: ", total.get())));
+				.otherwise(Bindings.concat("IMC: "))
+				); */
 		
 	}
 	
