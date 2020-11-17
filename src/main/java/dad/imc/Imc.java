@@ -2,6 +2,7 @@ package dad.imc;
 
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -75,20 +76,38 @@ public class Imc extends Application {
 		textoAltura.bindBidirectional(alturaText.textProperty());
 		Bindings.bindBidirectional(textoPeso, peso, new NumberStringConverter());
 		Bindings.bindBidirectional(textoAltura, altura, new NumberStringConverter());
+		DoubleBinding resultado = ((peso.divide(altura.multiply(altura))).multiply(10000d));
+		total.bind(resultado);
 		
-		total.bind((peso.divide(altura.multiply(altura))).multiply(10000d));
+		totalIMC.set("IMC: ");
 		
-		total.addListener((o, ov, nv) -> System.out.println(nv));
+		imcLabel.textProperty().bind(totalIMC.concat(resultado.asString("%.2f\n")));
+		
+		total.addListener((o, ov, nv) -> clasificaPeso(nv));
+		
+	}
+	
+
+	public void clasificaPeso(Number nv) {
+		
+		if (nv.doubleValue() < 18.5) {
+
+			clasificacionLabel.setText("Bajo peso");
 			
-		
-		
-		/* imcLabel.textProperty().bind(
-				Bindings
-				.when(imcLabel.textProperty().isEmpty())
-				.then("IMC: (peso * altura^ 2)")
-				.otherwise(Bindings.concat("IMC: "))
-				); */
-		
+		} else if (nv.doubleValue() >= 18.5 && nv.doubleValue() < 25) {
+			
+			clasificacionLabel.setText("Normal");
+			
+		} else if (nv.doubleValue() >= 25 && nv.doubleValue() < 30) {
+			
+			clasificacionLabel.setText("Sobrepeso");
+
+		} else {
+			
+			clasificacionLabel.setText("Obeso");
+
+		}
+			
 	}
 	
 	public static void main(String[] args) {
